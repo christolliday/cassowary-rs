@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Solver","A constraint solver using the Cassowary algorithm. For proper usage please see the top level crate documentation."]]});

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Solver` struct in crate `cassowary`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Solver">
+
+    <title>cassowary::Solver - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>cassowary</a></p><script>window.sidebarCurrent = {name: 'Solver', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>cassowary</a>::<wbr><a class='struct' href=''>Solver</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-32' class='srclink' href='../src/cassowary/src/solver_impl.rs.html#37-50' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Solver {
+    // some fields omitted
+}</pre><div class='docblock'><p>A constraint solver using the Cassowary algorithm. For proper usage please see the top level crate documentation.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../cassowary/struct.Solver.html' title='cassowary::Solver'>Solver</a></code></h3><div class='impl-items'><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; <a class='struct' href='../cassowary/struct.Solver.html' title='cassowary::Solver'>Solver</a></code></h4>
+<div class='docblock'><p>Construct a new solver.</p>
+</div><h4 id='method.add_constraints' class='method'><code>fn <a href='#method.add_constraints' class='fnname'>add_constraints</a>&lt;'a, I: <a class='trait' href='https://doc.rust-lang.org/nightly/core/iter/trait.IntoIterator.html' title='core::iter::IntoIterator'>IntoIterator</a>&lt;Item=&amp;'a <a class='struct' href='../cassowary/struct.Constraint.html' title='cassowary::Constraint'>Constraint</a>&gt;&gt;(&amp;mut self, constraints: I) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../cassowary/enum.AddConstraintError.html' title='cassowary::AddConstraintError'>AddConstraintError</a>&gt;</code></h4>
+<h4 id='method.add_constraint' class='method'><code>fn <a href='#method.add_constraint' class='fnname'>add_constraint</a>(&amp;mut self, constraint: <a class='struct' href='../cassowary/struct.Constraint.html' title='cassowary::Constraint'>Constraint</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../cassowary/enum.AddConstraintError.html' title='cassowary::AddConstraintError'>AddConstraintError</a>&gt;</code></h4>
+<div class='docblock'><p>Add a constraint to the solver.</p>
+</div><h4 id='method.remove_constraint' class='method'><code>fn <a href='#method.remove_constraint' class='fnname'>remove_constraint</a>(&amp;mut self, constraint: &amp;<a class='struct' href='../cassowary/struct.Constraint.html' title='cassowary::Constraint'>Constraint</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../cassowary/enum.RemoveConstraintError.html' title='cassowary::RemoveConstraintError'>RemoveConstraintError</a>&gt;</code></h4>
+<div class='docblock'><p>Remove a constraint from the solver.</p>
+</div><h4 id='method.has_constraint' class='method'><code>fn <a href='#method.has_constraint' class='fnname'>has_constraint</a>(&amp;self, constraint: &amp;<a class='struct' href='../cassowary/struct.Constraint.html' title='cassowary::Constraint'>Constraint</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Test whether a constraint has been added to the solver.</p>
+</div><h4 id='method.add_edit_variable' class='method'><code>fn <a href='#method.add_edit_variable' class='fnname'>add_edit_variable</a>(&amp;mut self, v: <a class='struct' href='../cassowary/struct.Variable.html' title='cassowary::Variable'>Variable</a>, strength: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../cassowary/enum.AddEditVariableError.html' title='cassowary::AddEditVariableError'>AddEditVariableError</a>&gt;</code></h4>
+<div class='docblock'><p>Add an edit variable to the solver.</p>
+
+<p>This method should be called before the <code>suggest_value</code> method is
+used to supply a suggested value for the given edit variable.</p>
+</div><h4 id='method.remove_edit_variable' class='method'><code>fn <a href='#method.remove_edit_variable' class='fnname'>remove_edit_variable</a>(&amp;mut self, v: <a class='struct' href='../cassowary/struct.Variable.html' title='cassowary::Variable'>Variable</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../cassowary/enum.RemoveEditVariableError.html' title='cassowary::RemoveEditVariableError'>RemoveEditVariableError</a>&gt;</code></h4>
+<div class='docblock'><p>Remove an edit variable from the solver.</p>
+</div><h4 id='method.has_edit_variable' class='method'><code>fn <a href='#method.has_edit_variable' class='fnname'>has_edit_variable</a>(&amp;mut self, v: &amp;<a class='struct' href='../cassowary/struct.Variable.html' title='cassowary::Variable'>Variable</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<div class='docblock'><p>Test whether an edit variable has been added to the solver.</p>
+</div><h4 id='method.suggest_value' class='method'><code>fn <a href='#method.suggest_value' class='fnname'>suggest_value</a>(&amp;mut self, variable: <a class='struct' href='../cassowary/struct.Variable.html' title='cassowary::Variable'>Variable</a>, value: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../cassowary/enum.SuggestValueError.html' title='cassowary::SuggestValueError'>SuggestValueError</a>&gt;</code></h4>
+<div class='docblock'><p>Suggest a value for the given edit variable.</p>
+
+<p>This method should be used after an edit variable has been added to
+the solver in order to suggest the value for that variable.</p>
+</div><h4 id='method.fetch_changes' class='method'><code>fn <a href='#method.fetch_changes' class='fnname'>fetch_changes</a>(&amp;mut self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a><a class='struct' href='../cassowary/struct.Variable.html' title='cassowary::Variable'>Variable</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a></code></h4>
+<div class='docblock'><p>Fetches all changes to the values of variables since the last call to this function.</p>
+
+<p>The list of changes returned is not in a specific order. Each change comprises the variable changed and
+the new value of that variable.</p>
+
+<p>Note that variables start with an implicit value of zero.
+If a variable never changes from zero a change may not be returned from this function for it.</p>
+</div><h4 id='method.reset' class='method'><code>fn <a href='#method.reset' class='fnname'>reset</a>(&amp;mut self)</code></h4>
+<div class='docblock'><p>Reset the solver to the empty starting condition.</p>
+
+<p>This method resets the internal solver state to the empty starting
+condition, as if no constraints or edit variables have been added.
+This can be faster than deleting the solver and creating a new one
+when the entire system must change, since it can avoid unnecessary
+heap (de)allocations.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "cassowary";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
