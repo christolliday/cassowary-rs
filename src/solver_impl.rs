@@ -324,6 +324,16 @@ impl Solver {
         &self.public_changes
     }
 
+    /// Get the stored value for a variable.
+    ///
+    /// The preferred way of retrieving updates is using fetch_changes, but
+    /// this method can be helpful for debugging or prototyping.
+    pub fn get_value(&mut self, v: Variable) -> f64 {
+        self.var_data.get(&v).and_then(|s| {
+            self.rows.get(&s.1).map(|r| r.constant)
+        }).unwrap_or(0.0)
+    }
+
     /// Reset the solver to the empty starting condition.
     ///
     /// This method resets the internal solver state to the empty starting
