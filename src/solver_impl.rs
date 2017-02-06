@@ -20,8 +20,8 @@ use ::std::rc::Rc;
 use ::std::cell::RefCell;
 use ::std::collections::{ HashMap, HashSet };
 
-#[derive(Copy, Clone)]
-struct Tag {
+#[derive(Copy, Clone, Debug)]
+pub struct Tag {
     marker: Symbol,
     other: Symbol
 }
@@ -76,6 +76,13 @@ impl Solver {
             try!(self.add_constraint(constraint.clone()));
         }
         Ok(())
+    }
+
+    pub fn debug_constraints(&self) {
+        println!("CONSTRAINTS");
+        for (key, val) in self.cns.iter() {
+            println!("key: {}", key);
+        }
     }
 
     /// Add a constraint to the solver.

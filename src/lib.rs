@@ -225,6 +225,10 @@
 //! One thing that this example exposes is that this crate is a rather low level library. It does not have
 //! any inherent knowledge of user interfaces, directions or boxes. Thus for use in a user interface this
 //! crate should ideally be wrapped by a higher level API, which is outside the scope of this crate.
+#[macro_use]
+extern crate lazy_static;
+use std::sync::{Mutex, MutexGuard};
+
 use std::sync::Arc;
 use std::collections::HashMap;
 use std::collections::hash_map::{Entry};
@@ -233,6 +237,15 @@ mod solver_impl;
 mod operators;
 
 static VARIABLE_ID: ::std::sync::atomic::AtomicUsize = ::std::sync::atomic::ATOMIC_USIZE_INIT;
+
+
+lazy_static! {
+    pub static ref VAR_NAMES: Mutex<HashMap<Variable, String>> = Mutex::new(HashMap::new());
+}
+pub fn add_var_name(var: Variable, name: &str) {
+    let mut names = VAR_NAMES.lock().unwrap();
+    names.insert(var, name.to_owned());
+}
 
 /// Identifies a variable for the constraint solver.
 /// Each new variable is unique in the view of the solver, but copying or cloning the variable produces
@@ -244,6 +257,21 @@ impl Variable {
     /// Produces a new unique variable for use in constraint solving.
     pub fn new() -> Variable {
         Variable(VARIABLE_ID.fetch_add(1, ::std::sync::atomic::Ordering::Relaxed))
+    }
+    pub fn new_with_name(name: &str) -> Variable {
+        let var = Variable::new();
+        let mut names = VAR_NAMES.lock().unwrap();
+        names.insert(var, name.to_owned());
+        var
+    }
+}
+impl std::fmt::Display for Variable {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let var = format!("var({})", self.0);
+        let names = VAR_NAMES.lock().unwrap();
+        let name = names.get(&self);
+        let name = name.unwrap_or(&var);
+        write!(fmt, "{}", name)
     }
 }
 
@@ -262,6 +290,12 @@ impl Term {
             variable: variable,
             coefficient: coefficient
         }
+    }
+}
+
+impl std::fmt::Display for Term {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(fmt, "{} * {}", self.coefficient, self.variable)
     }
 }
 
@@ -323,6 +357,41 @@ impl From<Term> for Expression {
     }
 }
 
+impl std::fmt::Display for Expression {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let mut first = true;
+        if self.constant != 0.0 {
+            try!(write!(fmt, "{}", self.constant));
+            first = false;
+        }
+        for term in self.terms.iter() {
+            let coef = {
+                if term.coefficient == 1.0 {
+                    if first {
+                        "".to_owned()
+                    } else {
+                        "+ ".to_owned()
+                    }
+                } else if term.coefficient == -1.0 {
+                    "- ".to_owned()
+                } else if term.coefficient > 0.0 {
+                    if !first {
+                        format!("+ {} * ", term.coefficient)
+                    } else {
+                        format!("{} * ", term.coefficient)
+                    }
+                } else {
+                    format!("- {} * ", term.coefficient)
+                }
+            };
+            try!(write!(fmt, " {}{}", coef, term.variable));
+
+            first = false;
+        }
+        Ok(())
+    }
+}
+
 /// Contains useful constants and functions for producing strengths for use in the constraint solver.
 /// Each constraint added to the solver has an associated strength specifying the precedence the solver should
 /// impose when choosing which constraints to enforce. It will try to enforce all constraints, but if that
@@ -371,6 +440,17 @@ pub enum RelationalOperator {
     GreaterOrEqual
 }
 
+impl std::fmt::Display for RelationalOperator {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match *self {
+            RelationalOperator::LessOrEqual => try!(write!(fmt, "<=")),
+            RelationalOperator::Equal => try!(write!(fmt, "==")),
+            RelationalOperator::GreaterOrEqual => try!(write!(fmt, ">=")),
+        }
+        Ok(())
+    }
+}
+
 #[derive(Debug)]
 struct ConstraintData {
     expression: Expression,
@@ -405,6 +485,23 @@ impl Constraint {
     /// The strength of the constraint that the solver will use.
     pub fn strength(&self) -> f64 {
         self.0.strength
+    }
+}
+impl std::fmt::Display for Constraint {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let strength_desc = {
+            let stren = self.0.strength;
+            if stren < strength::WEAK { "WEAK-" }
+            else if stren == strength::WEAK { "WEAK " }
+            else if stren < strength::MEDIUM { "WEAK+" }
+            else if stren == strength::MEDIUM { "MED  " }
+            else if stren < strength::STRONG { "MED+ " }
+            else if stren == strength::STRONG { "STR  " }
+            else if stren < strength::REQUIRED { "STR+ " }
+            else if stren == strength::REQUIRED { "REQD " }
+            else { "REQD+" }
+        };
+        write!(fmt, "{} {} {} 0", strength_desc, self.0.expression, self.0.op)
     }
 }
 
@@ -449,7 +546,7 @@ impl From<WeightedRelation> for (RelationalOperator, f64) {
 /// directly.
 pub struct PartialConstraint(Expression, WeightedRelation);
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 enum SymbolType {
     Invalid,
     External,
@@ -458,7 +555,7 @@ enum SymbolType {
     Dummy
 }
 
-#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
 struct Symbol(usize, SymbolType);
 
 impl Symbol {

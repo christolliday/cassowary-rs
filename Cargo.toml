@@ -16,3 +16,5 @@ license = "MIT / Apache-2.0"
 keywords = ["constraint", "simplex", "user", "interface", "layout"]
 
 [dependencies]
+
+lazy_static = "0.2.2"
