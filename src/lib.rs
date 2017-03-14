@@ -373,15 +373,15 @@ pub enum RelationalOperator {
 
 #[derive(Debug)]
 struct ConstraintData {
-    expression: Expression,
-    strength: f64,
-    op: RelationalOperator
+    pub expression: Expression,
+    pub strength: f64,
+    pub op: RelationalOperator
 }
 
 /// A constraint, consisting of an equation governed by an expression and a relational operator,
 /// and an associated strength.
 #[derive(Clone, Debug)]
-pub struct Constraint(Arc<ConstraintData>);
+pub struct Constraint(pub Arc<ConstraintData>);
 
 impl Constraint {
     /// Construct a new constraint from an expression, a relational operator and a strength.
