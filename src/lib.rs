@@ -372,7 +372,7 @@ pub enum RelationalOperator {
 }
 
 #[derive(Debug)]
-struct ConstraintData {
+pub struct ConstraintData {
     pub expression: Expression,
     pub strength: f64,
     pub op: RelationalOperator
