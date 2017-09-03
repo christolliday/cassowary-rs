@@ -328,10 +328,15 @@ impl Solver {
     ///
     /// The preferred way of retrieving updates is using fetch_changes, but
     /// this method can be helpful for debugging or prototyping.
-    pub fn get_value(&mut self, v: Variable) -> f64 {
+    pub fn get_value(&self, v: Variable) -> f64 {
         self.var_data.get(&v).and_then(|s| {
             self.rows.get(&s.1).map(|r| r.constant)
         }).unwrap_or(0.0)
+    }
+
+    /// Get the list of active constraints, can be used for debugging.
+    pub fn get_constraints(&self) -> Vec<&Constraint> {
+        self.cns.keys().collect()
     }
 
     /// Reset the solver to the empty starting condition.
