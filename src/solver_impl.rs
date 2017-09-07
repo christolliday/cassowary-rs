@@ -27,9 +27,9 @@ struct Tag {
 }
 
 #[derive(Clone)]
-struct EditInfo {
+pub struct EditInfo {
     tag: Tag,
-    constraint: Constraint,
+    pub constraint: Constraint,
     constant: f64
 }
 
@@ -225,7 +225,7 @@ impl Solver {
     }
 
     /// Test whether an edit variable has been added to the solver.
-    pub fn has_edit_variable(&mut self, v: &Variable) -> bool {
+    pub fn has_edit_variable(&self, v: &Variable) -> bool {
         self.edits.contains_key(v)
     }
 
@@ -337,6 +337,16 @@ impl Solver {
     /// Get the list of active constraints, can be used for debugging.
     pub fn get_constraints(&self) -> Vec<&Constraint> {
         self.cns.keys().collect()
+    }
+
+    /// Get a constraint representing the edit variable for a given variable, if one exists.
+    /// The constraint doesn't actually exist as is, this is for debugging only.
+    pub fn get_edit_variable(&self, var: Variable) -> Option<Constraint> {
+        self.edits.get(&var).map(|info| {
+            let cons = &info.constraint.0;
+            let expr = Expression::new(cons.expression.terms.clone(), info.constant);
+            Constraint::new(expr, cons.op, cons.strength)
+        })
     }
 
     /// Reset the solver to the empty starting condition.
